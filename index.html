@@ -2,21 +2,20 @@
 
 <meta charset="utf-8">
 <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,300,400italic,400,600italic,600,700italic,700,800italic,800" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Open+Sans Condensed:300italic,300,700" rel="stylesheet" type="text/css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <style>
 
 .bar {
-  fill: steelblue;
+  fill: #002B33;
 }
 
-.bar:hover {
-  fill: brown;
+body{
+  font-family: 'Open Sans';
 }
-
 .axis {
   font-size: 14px;
-  font-family: 'Open Sans'
 }
 
 .axis path,
@@ -30,13 +29,37 @@
   display: none;
 }
 
+.graph {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#controls{
+  margin: auto;
+  width: 360px;
+}
+
+#slider{
+/*  margin:auto;
+  display: block;*/
+}
+
+#percent{
+  position: relative;
+  left: 118px;
+}
+
+#percent-value{
+  font-family: "Open Sans Condensed";
+  font-size: 25px;
+  font-weight: bold;
+}
 </style>
 <body>
-  <div>
-    Thing 1 looks like it's <span id="percent-value"></span>% as big as Thing 2
-
-
-    <input type="range" id="percent" min = ".01" max = "99.9" step = ".01" name="percent" value = "50">
+  <div id = "controls">
+    <strong>Thing 1</strong> looks like it's <span id="percent-value"></span>% as big as <strong>Thing 2</strong>
+      <input type="range" id="percent" min = ".01" max = "99.9" step = ".01" name="percent" value = "50">
   </div>
 
 
@@ -67,6 +90,7 @@ var margin = {top: 20, right: 50, bottom: 30, left: 40},
       .ticks(10, "");
 
   var svg = d3.select("body").append("svg")
+      .attr("class","graph")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -86,7 +110,7 @@ function bars(inp){
   
   d3.tsv("data.tsv", type, function(error, data) {
 
-    x.domain(data.map(function(d) { return d.letter; }));
+    x.domain(data.map(function(d) { return d.category; }));
     y.domain([lowerBound, d3.max(data, function(d) { return d.value; })]);
 
 
@@ -117,14 +141,14 @@ function bars(inp){
 
     bars.enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d) { return x(d.letter); })
+        .attr("x", function(d) { return x(d.category); })
         .attr("height", function(d) { return height - y(d.value); })
         .attr("width", x.rangeBand())
         .attr("y", function(d) { return y(d.value); })
 
     bars.enter().append("text")
       .attr("class", "barLabel")
-      .attr("x", function(d) { return x(d.letter); })
+      .attr("x", function(d) { return x(d.category) + x.rangeBand()/2; })
       .attr("y", function(d) { return y(d.value); } )
       .text(function(d) { return d.value; });
 
