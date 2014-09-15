@@ -112,13 +112,29 @@ function bars(inp){
     var bars = svg.selectAll(".bar")
       .data(data);
 
+    var labels = svg.selectAll(".barLabel")
+
+
     bars.enter().append("rect")
         .attr("class", "bar")
         .attr("x", function(d) { return x(d.letter); })
+        .attr("height", function(d) { return height - y(d.value); })
         .attr("width", x.rangeBand())
         .attr("y", function(d) { return y(d.value); })
 
+    bars.enter().append("text")
+      .attr("class", "barLabel")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("y", function(d) { return y(d.value); } )
+      .text(function(d) { return d.value; });
+
+
     var barUpdate = d3.transition(bars)
+      .transition().duration(500)
+      .attr("height", function(d) { return height - y(d.value); })
+      .attr("y", function(d) { return y(d.value); });
+
+    var labelUpdate = d3.transition(labels)
       .transition().duration(500)
       .attr("height", function(d) { return height - y(d.value); })
       .attr("y", function(d) { return y(d.value); });
@@ -143,7 +159,7 @@ d3.select("#percent").on("input", function() {
   bars(+this.value);
 });
 
-bars(50.);
+bars(50.0);
 
 
 
