@@ -30,14 +30,17 @@ body{
 }
 
 .graph {
+  margin-top: 10px;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
 
 #controls{
-  margin: auto;
-  width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  width: 380px;
 }
 
 #slider{
@@ -47,19 +50,25 @@ body{
 
 #percent{
   position: relative;
-  left: 118px;
+  margin-top: 10px;
+  left: 82px;
+  width: 200px;
 }
 
-#percent-value{
+#value-wrapper{
+  display: inline-block;
   font-family: "Open Sans Condensed";
   font-size: 25px;
   font-weight: bold;
+  width: 64px;
+  margin-left: 10px;
+  color: #FA514B;
 }
 </style>
 <body>
   <div id = "controls">
-    <strong>Thing 1</strong> looks like it's <span id="percent-value"></span>% as big as <strong>Thing 2</strong>
-      <input type="range" id="percent" min = ".01" max = "99.9" step = ".01" name="percent" value = "50">
+    <strong>Thing 1</strong> looks like it's <div id = "value-wrapper"><span id="percent-value"></span>%</div> as big as <strong>Thing 2</strong>
+      <input type="range" id="percent" min = ".1" max = "99.9" step = ".1" name="percent" value = "50">
   </div>
 
 
@@ -136,7 +145,6 @@ function bars(inp){
     var bars = svg.selectAll(".bar")
       .data(data);
 
-    var labels = svg.selectAll(".barLabel")
 
 
     bars.enter().append("rect")
@@ -148,10 +156,11 @@ function bars(inp){
 
     bars.enter().append("text")
       .attr("class", "barLabel")
-      .attr("x", function(d) { return x(d.category) + x.rangeBand()/2; })
-      .attr("y", function(d) { return y(d.value); } )
+      .attr("x", function(d) { return x(d.category) + x.rangeBand()/2 - 4; })
+      .attr("y", function(d) { return y(d.value) - 5; } )
       .text(function(d) { return d.value; });
 
+    var labels = svg.selectAll(".barLabel")
 
     var barUpdate = d3.transition(bars)
       .transition().duration(500)
@@ -160,8 +169,8 @@ function bars(inp){
 
     var labelUpdate = d3.transition(labels)
       .transition().duration(500)
-      .attr("height", function(d) { return height - y(d.value); })
-      .attr("y", function(d) { return y(d.value); });
+      // .attr("height", function(d) { return height - y(d.value); })
+      .attr("y", function(d) { return y(d.value) - 5; });
 
 
 
