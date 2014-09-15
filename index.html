@@ -12,6 +12,7 @@
 }
 
 body{
+  height: 800px;
   font-family: 'Open Sans';
 }
 .axis {
@@ -26,6 +27,10 @@ body{
 }
 
 .x.axis path {
+  display: none;
+}
+
+.x.axis line{
   display: none;
 }
 
@@ -52,7 +57,7 @@ body{
   position: relative;
   margin-top: 10px;
   left: 82px;
-  width: 200px;
+  width: 240px;
 }
 
 #value-wrapper{
@@ -61,13 +66,34 @@ body{
   font-size: 25px;
   font-weight: bold;
   width: 64px;
-  margin-left: 10px;
+  margin-left: 5px;
   color: #FA514B;
+}
+
+.acc_trigger{
+  font-size: 20px;
+  font-style: italic;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.acc_container{
+  margin-left: auto;
+  margin-right: auto;
+  width: 750px;
+  line-height: 1.5em;
+}
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none; color: black;
 }
 </style>
 <body>
   <div id = "controls">
-    <strong>Thing 1</strong> looks like it's <div id = "value-wrapper"><span id="percent-value"></span>%</div> as big as <strong>Thing 2</strong>
+    <strong>Thing 1</strong> appears to be <div id = "value-wrapper"><span id="percent-value"></span></div> as big as <strong>Thing 2</strong>
       <input type="range" id="percent" min = ".1" max = "99.9" step = ".1" name="percent" value = "50">
   </div>
 
@@ -107,8 +133,16 @@ var margin = {top: 20, right: 50, bottom: 30, left: 40},
 
 
 function bars(inp){
+  inp = parseFloat(inp);
+  var percentFormat
+  if(inp < 1.0){
+    percentFormat = d3.format(".2p")
+  }
+  else{
+    percentFormat = d3.format(".3p")
+  }
 
-  d3.select("#percent-value").text(inp);
+  d3.select("#percent-value").text(percentFormat((inp/100.0)));
 
 
   percentIn = parseFloat(inp);
@@ -116,6 +150,7 @@ function bars(inp){
   d3.selectAll('.axis').remove();
 
   var lowerBound = parseFloat((100.0 - 2*percentIn) / (100.0 - percentIn));
+
   
   d3.tsv("data.tsv", type, function(error, data) {
 
@@ -212,10 +247,46 @@ function type(d) {
 //         $("yourFormId").submit();
 //     }
 // };
-</script>
-<div>
-  asdflaskdjfa
-</div>
 
+
+
+jQuery(document).ready(function($) {
+//Set default open/close settings
+$('.acc_container').hide(); //Hide/close all containers
+
+    //On Click
+$('.acc_trigger').click(function(){
+
+  if ($(this).hasClass('active')){
+    $('.acc_trigger').removeClass('active').next().slideUp();
+  }
+
+ else{
+    $(this).addClass('active').next().slideDown();
+    // return false; //Prevent the browser jump to the link anchor
+}
+
+     $("html, body").animate({scrollTop: $("#acc_container").offset(200)});
+
+  
+
+});
+
+
+    
+
+    
+
+});
+
+
+
+</script>
+<div class="acc_trigger"><a href="#">What's Going on Here?</a></div>
+<div class="acc_container">
+<div class="block">
+  The minimum value in a bar chart (also called the <em>baseline</em>) should always be 0. When this value is greater than 0, the graph is said to have a <em>"truncated y-axis"</em>. As you can see in the example above, but truncating or extending the y-axis (making the range of y-values smaller or larger), it's possible to make bars appear to have almost any relationship to each other. Thing 2 is always bigger than Thing 1, but the relationship between them <em>appears to</em> change dramatically if the baseline is non zero. <em>The actual values aren't changing!</em> Graphs with non-zero baselines mislead the reader (whether or not that's the autors intentions), representing relationships that don't exist.
+</div>
+</div>
 </body>
 </html>
