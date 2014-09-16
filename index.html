@@ -8,7 +8,7 @@
 <style>
 
 .bar {
-  fill: #002B33;
+  fill: #587E8C;
 }
 
 body{
@@ -85,6 +85,13 @@ body{
   margin-right: auto;
   width: 750px;
   line-height: 1.5em;
+}
+
+#scrollArrow{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -10px;
 }
 
 a:link, a:visited, a:hover, a:active {
@@ -266,12 +273,25 @@ $('.acc_trigger').click(function(){
     // return false; //Prevent the browser jump to the link anchor
 }
 
-     $("html, body").animate({scrollTop: $("#acc_container").offset(200)});
-
-  
-
 });
 
+$('.acc_trigger_arrow').click(function(){
+
+  if ($(this).hasClass('active')){
+    $('.acc_trigger_arrow').removeClass('active');
+
+    $('.acc_container').slideUp();
+  }
+
+ else{
+    $('.acc_trigger_arrow').addClass('active');
+
+    $('.acc_container').slideDown();
+
+    // return false; //Prevent the browser jump to the link anchor
+}
+
+});
 
     
 
@@ -282,11 +302,23 @@ $('.acc_trigger').click(function(){
 
 
 </script>
-<div class="acc_trigger"><a href="#">What's Going on Here?</a></div>
+<div class="acc_trigger"><a href="#">What's Going on Here?</a>
+</div>
 <div class="acc_container">
 <div class="block">
   The minimum value in a bar chart (also called the <em>baseline</em>) should always be 0. When this value is greater than 0, the graph is said to have a <em>"truncated y-axis"</em>. As you can see in the example above, but truncating or extending the y-axis (making the range of y-values smaller or larger), it's possible to make bars appear to have almost any relationship to each other. Thing 2 is always bigger than Thing 1, but the relationship between them <em>appears to</em> change dramatically if the baseline is non zero. <em>The actual values aren't changing!</em> Graphs with non-zero baselines mislead the reader (whether or not that's the autors intentions), representing relationships that don't exist.
 </div>
+</div>
+<div class = "acc_trigger_arrow"><a href="#">
+  <svg version="1.1" id="scrollArrow" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     width="50px" height="50px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+  <g id="Your_Icon">
+    <path d="M84.256,34.154c-1.137-1.361-3.15-1.545-4.514-0.41L49,59.373L18.258,33.744c-1.361-1.132-3.381-0.947-4.514,0.41
+      c-1.135,1.358-0.951,3.381,0.408,4.514l32.795,27.338c0.594,0.496,1.324,0.744,2.053,0.744c0.73,0,1.459-0.248,2.053-0.744
+      l32.795-27.338C85.207,37.535,85.391,35.513,84.256,34.154z"/>
+  </g>
+  </svg>
+  </a>
 </div>
 </body>
 </html>
